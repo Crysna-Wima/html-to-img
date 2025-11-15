@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Flyer Umroh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .input-section {
+            flex: 1;
+            min-width: 350px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .input-section h2 {
+            color: #b8860b;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #b8860b;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .section-title {
+            background: #b8860b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 20px 0 15px 0;
+            font-size: 0.95em;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #b8860b, #daa520);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(184, 134, 11, 0.4);
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4);
+        }
+
+        .preview-section {
+            flex: 2;
+            min-width: 600px;
+        }
+
+        .preview-section h2 {
+            color: #b8860b;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        /* FLYER DESIGN */
+        .flyer {
+            width: 1024px;
+            height: 768px;
+            background: linear-gradient(135deg, #c9a961 0%, #b8860b 30%, #8b6914 70%, #6b4f0f 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        .flyer-title {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            font-family: 'Georgia', serif;
+            font-size: 42px;
+            font-weight: bold;
+            font-style: italic;
+            color: #ffd700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .logo-inner {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #b8860b, #daa520);
+            clip-path: polygon(50% 10%, 90% 30%, 90% 70%, 50% 90%, 10% 70%, 10% 30%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .program-badge {
+            position: absolute;
+            top: 120px;
+            left: 40px;
+            background: white;
+            padding: 8px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 10;
+        }
+
+        .date-badge {
+            position: absolute;
+            top: 120px;
+            left: 220px;
+            background: #b8860b;
+            color: white;
+            padding: 8px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 10;
+        }
+
+        .price-section {
+            position: absolute;
+            top: 170px;
+            left: 40px;
+            z-index: 10;
+        }
+
+        .price-label {
+            background: #8b0000;
+            color: white;
+            padding: 5px 15px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #ffd700;
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .includes-section {
+            position: absolute;
+            top: 290px;
+            left: 40px;
+            z-index: 10;
+            color: white;
+        }
+
+        .includes-title {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .includes-list {
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .includes-list div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .check-icon {
+            color: #90EE90;
+            font-weight: bold;
+        }
+
+        .excludes-section {
+            position: absolute;
+            top: 460px;
+            left: 40px;
+            z-index: 10;
+            color: white;
+        }
+
+        .excludes-title {
+            color: #ff6b6b;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .excludes-list {
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .excludes-list div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .x-icon {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .contact-section {
+            position: absolute;
+            bottom: 60px;
+            left: 40px;
+            z-index: 10;
+        }
+
+        .phone {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-icon {
+            background: #90EE90;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .website {
+            color: #ccc;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .social-icons {
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .social-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Decorative wave */
+        .wave {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 60%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            clip-path: path('M 400 0 Q 300 200 350 400 Q 400 600 300 768 L 624 768 L 624 0 Z');
+            z-index: 1;
+        }
+
+        /* Image placeholders */
+        .kaaba-image {
+            position: absolute;
+            right: 80px;
+            top: 150px;
+            width: 400px;
+            height: 350px;
+            background: linear-gradient(45deg, #333, #555);
+            border: 8px solid #ffd700;
+            transform: rotate(-5deg);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .kaaba-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hands-image {
+            position: absolute;
+            right: 0;
+            top: 80px;
+            width: 250px;
+            height: 200px;
+            z-index: 6;
+            opacity: 0.8;
+        }
+
+        .hotel-info {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 10;
+            min-width: 300px;
+        }
+
+        .airline-info {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .airline-label {
+            color: #00bcd4;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .airline-name {
+            color: #333;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .hotel-item {
+            margin-bottom: 10px;
+        }
+
+        .hotel-label {
+            background: #ffd700;
+            color: #333;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 3px;
+        }
+
+        .hotel-name {
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Responsive scaling */
+        .flyer-wrapper {
+            transform-origin: top left;
+            display: inline-block;
+        }
+
+        @media (max-width: 1200px) {
+            .flyer-wrapper {
+                transform: scale(0.7);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-section">
+            <h2>🕋 Generator Flyer Umroh</h2>
+            
+            <div class="form-group">
+                <label>Judul Paket</label>
+                <input type="text" id="packageTitle" value="Umroh Start Jakarta Ruby" placeholder="Contoh: Umroh Start Jakarta Ruby">
+            </div>
+
+            <div class="form-group">
+                <label>Durasi Program (Hari)</label>
+                <input type="number" id="programDays" value="9" min="1">
+            </div>
+
+            <div class="form-group">
+                <label>Tanggal Keberangkatan</label>
+                <input type="date" id="departureDate" value="2025-10-22">
+            </div>
+
+            <div class="form-group">
+                <label>Harga (IDR)</label>
+                <input type="number" id="price" value="33079000" placeholder="33079000">
+            </div>
+
+            <div class="section-title">✅ Harga Termasuk</div>
+            <div class="form-group">
+                <textarea id="includes" placeholder="Masukkan satu item per baris">Tiket Pesawat PP
+Transportasi Selama Umroh
+Hotel Nyaman Selama di Tanah Suci
+Visa Umroh
+2 Koper Eksklusif</textarea>
+            </div>
+
+            <div class="section-title">❌ Harga Tidak Termasuk</div>
+            <div class="form-group">
+                <textarea id="excludes" placeholder="Masukkan satu item per baris">Vaksin (Miningitis + Polio)
+Akomodasi Daerah
+Keperluan Pribadi
+Paspor
+Kebijakan Pemerintah (Jika Ada)</textarea>
+            </div>
+
+            <div class="section-title">📞 Kontak</div>
+            <div class="form-group">
+                <label>Nomor Telepon</label>
+                <input type="text" id="phone" value="0877 4823 938">
+            </div>
+
+            <div class="form-group">
+                <label>Website</label>
+                <input type="text" id="website" value="mutravelnyata.com">
+            </div>
+
+            <div class="section-title">🏨 Informasi Hotel & Maskapai</div>
+            <div class="form-group">
+                <label>Maskapai</label>
+                <input type="text" id="airline" value="Garuda Indonesia">
+            </div>
+
+            <div class="form-group">
+                <label>Hotel Makkah</label>
+                <input type="text" id="hotelMakkah" value="Grand Makkah Hotel">
+            </div>
+
+            <div class="form-group">
+                <label>Hotel Madinah</label>
+                <input type="text" id="hotelMadinah" value="Zowar International Hotel">
+            </div>
+
+            <div class="section-title">🖼️ Gambar (Opsional)</div>
+            <div class="form-group">
+                <label>URL Gambar Ka'bah</label>
+                <input type="text" id="kaabaImage" placeholder="https://example.com/kaaba.jpg">
+            </div>
+
+            <button class="generate-btn" onclick="generateFlyer()">🎨 Generate Flyer</button>
+            <button class="download-btn" onclick="downloadFlyer()">📥 Download sebagai Gambar</button>
+        </div>
+
+        <div class="preview-section">
+            <h2>Preview Flyer</h2>
+            <div class="flyer-wrapper" id="flyerWrapper">
+                <div class="flyer" id="flyer">
+                    <!-- Wave decoration -->
+                    <div class="wave"></div>
+                    
+                    <!-- Title -->
+                    <div class="flyer-title" id="flyerTitle">Umroh Start Jakarta Ruby</div>
+                    
+                    <!-- Logo -->
+                    <div class="logo">
+                        <div class="logo-inner">M</div>
+                    </div>
+                    
+                    <!-- Program & Date badges -->
+                    <div class="program-badge" id="programBadge">PROGRAM 9 HARI</div>
+                    <div class="date-badge" id="dateBadge">22 Oktober 2025</div>
+                    
+                    <!-- Price -->
+                    <div class="price-section">
+                        <div class="price-label">Harga Mulai Dari</div>
+                        <div class="price" id="priceDisplay">IDR 33.079.000</div>
+                    </div>
+                    
+                    <!-- Includes -->
+                    <div class="includes-section">
+                        <div class="includes-title">Harga Termasuk</div>
+                        <div class="includes-list" id="includesList">
+                            <div><span class="check-icon">✓</span> Tiket Pesawat PP</div>
+                            <div><span class="check-icon">✓</span> Transportasi Selama Umroh</div>
+                            <div><span class="check-icon">✓</span> Hotel Nyaman Selama di Tanah Suci</div>
+                            <div><span class="check-icon">✓</span> Visa Umroh</div>
+                            <div><span class="check-icon">✓</span> 2 Koper Eksklusif</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Excludes -->
+                    <div class="excludes-section">
+                        <div class="excludes-title">Harga Tidak Termasuk</div>
+                        <div class="excludes-list" id="excludesList">
+                            <div><span class="x-icon">✗</span> Vaksin (Miningitis + Polio)</div>
+                            <div><span class="x-icon">✗</span> Akomodasi Daerah</div>
+                            <div><span class="x-icon">✗</span> Keperluan Pribadi</div>
+                            <div><span class="x-icon">✗</span> Paspor</div>
+                            <div><span class="x-icon">✗</span> Kebijakan Pemerintah (Jika Ada)</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact -->
+                    <div class="contact-section">
+                        <div class="phone">
+                            <div class="phone-icon">📞</div>
+                            <span id="phoneDisplay">0877 4823 938</span>
+                        </div>
+                        <div class="website" id="websiteDisplay">mutravelnyata.com</div>
+                    </div>
+                    
+                    <!-- Social Icons -->
+                    <div class="social-icons">
+                        <div class="social-icon">📷</div>
+                        <div class="social-icon">f</div>
+                    </div>
+                    
+                    <!-- Ka'bah Image -->
+                    <div class="kaaba-image" id="kaabaImageContainer">
+                        <div id="kaabaPlaceholder">🕋<br>Gambar Ka'bah</div>
+                    </div>
+                    
+                    <!-- Hotel Info -->
+                    <div class="hotel-info">
+                        <div class="airline-info">
+                            <div class="airline-label">Maskapai</div>
+                            <div class="airline-name" id="airlineDisplay">✈️ Garuda Indonesia</div>
+                        </div>
+                        <div class="hotel-item">
+                            <div class="hotel-label">Hotel Makkah</div>
+                            <div class="hotel-name" id="hotelMakkahDisplay">Grand Makkah Hotel</div>
+                        </div>
+                        <div class="hotel-item">
+                            <div class="hotel-label">Hotel Madinah</div>
+                            <div class="hotel-name" id="hotelMadinahDisplay">Zowar International Hotel</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include html2canvas for downloading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        function formatPrice(num) {
+            return 'IDR ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+        }
+
+        function generateFlyer() {
+            // Get all input values
+            const title = document.getElementById('packageTitle').value;
+            const days = document.getElementById('programDays').value;
+            const date = document.getElementById('departureDate').value;
+            const price = document.getElementById('price').value;
+            const includes = document.getElementById('includes').value.split('\n').filter(item => item.trim());
+            const excludes = document.getElementById('excludes').value.split('\n').filter(item => item.trim());
+            const phone = document.getElementById('phone').value;
+            const website = document.getElementById('website').value;
+            const airline = document.getElementById('airline').value;
+            const hotelMakkah = document.getElementById('hotelMakkah').value;
+            const hotelMadinah = document.getElementById('hotelMadinah').value;
+            const kaabaImageUrl = document.getElementById('kaabaImage').value;
+
+            // Update flyer content
+            document.getElementById('flyerTitle').textContent = title;
+            document.getElementById('programBadge').textContent = `PROGRAM ${days} HARI`;
+            document.getElementById('dateBadge').textContent = formatDate(date);
+            document.getElementById('priceDisplay').textContent = formatPrice(price);
+            
+            // Update includes list
+            let includesHtml = '';
+            includes.forEach(item => {
+                includesHtml += `<div><span class="check-icon">✓</span> ${item}</div>`;
+            });
+            document.getElementById('includesList').innerHTML = includesHtml;
+            
+            // Update excludes list
+            let excludesHtml = '';
+            excludes.forEach(item => {
+                excludesHtml += `<div><span class="x-icon">✗</span> ${item}</div>`;
+            });
+            document.getElementById('excludesList').innerHTML = excludesHtml;
+            
+            // Update contact info
+            document.getElementById('phoneDisplay').textContent = phone;
+            document.getElementById('websiteDisplay').textContent = website;
+            
+            // Update hotel info
+            document.getElementById('airlineDisplay').textContent = '✈️ ' + airline;
+            document.getElementById('hotelMakkahDisplay').textContent = hotelMakkah;
+            document.getElementById('hotelMadinahDisplay').textContent = hotelMadinah;
+            
+            // Update Ka'bah image if URL provided
+            if (kaabaImageUrl) {
+                document.getElementById('kaabaImageContainer').innerHTML = 
+                    `<img src="${kaabaImageUrl}" alt="Ka'bah" onerror="this.parentElement.innerHTML='<div id=kaabaPlaceholder>🕋<br>Gambar tidak dapat dimuat</div>'">`;
+            } else {
+                document.getElementById('kaabaImageContainer').innerHTML = 
+                    '<div id="kaabaPlaceholder">🕋<br>Gambar Ka\'bah</div>';
+            }
+
+            // Show success message
+            alert('Flyer berhasil di-generate! Lihat preview di sebelah kanan.');
+        }
+
+        async function downloadFlyer() {
+            const flyer = document.getElementById('flyer');
+            
+            try {
+                const canvas = await html2canvas(flyer, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null
+                });
+                
+                const link = document.createElement('a');
+                link.download = 'flyer-umroh.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                alert('Flyer berhasil didownload!');
+            } catch (error) {
+                alert('Gagal mendownload flyer. Pastikan browser Anda mendukung fitur ini.');
+                console.error(error);
+            }
+        }
+
+        // Generate initial flyer on page load
+        window.onload = function() {
+            generateFlyer();
+        };
+    </script>
+</body>
+</html>
